@@ -5,9 +5,11 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.HashMap
+import kotlin.math.abs
+import kotlin.math.pow
 
 
-data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable, Comparable<Any?> {
+open class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable, Comparable<Any?> {
     private lateinit var powers: HashMap<String, Double>
 
     constructor(uv: UnitValue) : this(uv.value, uv.unit) {}
@@ -16,7 +18,7 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
         return UnitValue(this)
     }
 
-    infix operator fun add(vararg uvs: UnitValue): UnitValue {
+    fun add(vararg uvs: UnitValue): UnitValue {
         var `val` = value
         for (uv in uvs) {
             if (uv.unit == unit) `val` += uv.value
@@ -70,7 +72,7 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
 
     operator fun div(uv: UnitValue): UnitValue {
         var numer = deriveNumer()
-        var denom: String? = deriveDenom()
+        var denom = deriveDenom()
         val `val` = value / uv.value
         denom += uv.deriveNumer()
         numer += uv.deriveDenom()
@@ -84,34 +86,34 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
     fun pow(pow: Double): UnitValue {
         var numer = ""
         var denom = ""
-        for ((key, value1) in powers!!) {
+        for ((key, value1) in powers) {
             val p = value1 * pow
-            if (p == 0.0) continue else if (p == 1.0) numer += key else if (p == -1.0) denom += key else if (p > 0) numer += "$key^$p" else if (p < 0) denom += key + "^" + Math.abs(
+            if (p == 0.0) continue else if (p == 1.0) numer += key else if (p == -1.0) denom += key else if (p > 0) numer += "$key^$p" else if (p < 0) denom += "$key^" + abs(
                 p
             )
         }
-        return UnitValue(Math.pow(value, pow), formUnit(numer, denom))
+        return UnitValue(value.pow(pow), formUnit(numer, denom))
     }
 
     fun negate(): UnitValue {
         return UnitValue(-value, unit)
     }
 
-    private fun deriveNumer(): String? {
-        if (!unit!!.contains("/")) return unit
-        return if (unit!!.startsWith("1/")) "" else unit!!.split("/").toTypedArray()[0]
+    private fun deriveNumer(): String {
+        if (!unit.contains("/")) return unit
+        return if (unit.startsWith("1/")) "" else unit.split("/").toTypedArray()[0]
     }
 
     private fun deriveDenom(): String {
-        return if (!unit!!.contains("/")) "" else unit!!.split("/").toTypedArray()[1]
+        return if (!unit.contains("/")) "" else unit.split("/").toTypedArray()[1]
     }
 
-    private fun classify(uv: UnitValue): UnitValue {
-        if (uv.unit == "kgm^2/s^3") return Power(uv.value)
-        return if (uv.unit == "m/s^2") Acceleration(uv.value) else uv
-    }
+//    private fun classify(uv: UnitValue): UnitValue {
+//        if (uv.unit == "kgm^2/s^3") return Power(uv.value)
+//        return if (uv.unit == "m/s^2") Acceleration(uv.value) else uv
+//    }
 
-    private fun fix(unit: String?): String? {
+    private fun fix(unit: String?): String {
         var numer = ""
         var denom = ""
         var ognum = unit
@@ -134,7 +136,7 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
                     if (Pattern.compile("\\d|\\.").matcher("" + i).also { m = it }
                             .matches()) str += m.group() else break
                 }
-                p += if (str.contains(".")) str.toDouble() else str.toInt()
+                p += if (str.contains(".")) str.toDouble() else str.toInt().toDouble()
                 ognum = ognum.replaceFirst(u + "\\^" + str.toRegex(), "")
             }
             while (ognum!!.contains(u)) {
@@ -148,25 +150,25 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
                     if (Pattern.compile("\\d|\\.").matcher("" + i).also { m = it }
                             .matches()) str += m.group() else break
                 }
-                p -= if (str.contains(".")) str.toDouble() else str.toInt()
+                p -= if (str.contains(".")) str.toDouble() else str.toInt().toDouble()
                 ogden = ogden.replaceFirst(u + "\\^" + str.toRegex(), "")
             }
             while (ogden.contains(u)) {
                 p--
                 ogden = ogden.replaceFirst(u.toRegex(), "")
             }
-            powers!![u] = p
+            powers[u] = p
         }
-        for ((key, value1) in powers!!) {
-            if (value1 == 0) continue else if (value1 == 1) numer += key else if (value1 == -1) denom += key else if (value1 > 0) numer += "$key^$value1" else if (value1 < 0) denom += "$key^" + Math.abs(
+        for ((key, value1) in powers) {
+            if (value1 == 0.0) continue else if (value1 == 1.0) numer += key else if (value1 == -1.0) denom += key else if (value1 > 0) numer += "$key^$value1" else if (value1 < 0) denom += "$key^" + abs(
                 value1
             )
         }
         return formUnit(numer, denom)
     }
 
-    fun removeRandomZeroes(str: String): String {
-        var str = str
+    fun removeRandomZeroes(string: String): String {
+        var str = string
         if (str.contains(".")) {
             while (str[str.length - 1] == '0') {
                 str = str.substring(0, str.length - 1)
@@ -190,14 +192,19 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
         return value == other.value && unit == other.unit
     }
 
+    override fun equals(other: Any?): Boolean {
+        return if(other is UnitValue) value == other.value && unit == other.unit
+        else false
+    }
+
     operator fun compareTo(o: UnitValue): Int {
         if (value > o.value) return 1
         return if (value == o.value) 0 else -1
     }
 
-    override operator fun compareTo(o: Any): Int {
-        return if (o is UnitValue) {
-            compareTo(o)
+    override operator fun compareTo(other: Any?): Int {
+        return if (other is UnitValue) {
+            compareTo(other)
         } else -1
     }
 
@@ -212,17 +219,15 @@ data class UnitValue(var value: Double = 0.0, var unit: String = "") : Cloneable
             return if (!unit.contains("/")) "" else unit.split("/").toTypedArray()[0]
         }
 
-        private fun formUnit(numer: String?, denom: String?): String? {
-            if (numer!!.length > 0 && denom!!.length > 0) return "$numer/$denom" else if (numer.length > 0) return numer else if (denom!!.length > 0) return "1/$denom"
-            return ""
+        private fun formUnit(numer: String, denom: String) = run {
+            if (numer.isNotEmpty() && denom.isNotEmpty())
+                "$numer/$denom"
+            else if (numer.isNotEmpty())
+                numer
+            else if (denom.isNotEmpty())
+                "1/$denom"
+            else ""
         }
     }
 
-    init {
-        setUnit(unit)
-    }
-
-    override fun compareTo(other: Any?): Int {
-        TODO("Not yet implemented")
-    }
 }
