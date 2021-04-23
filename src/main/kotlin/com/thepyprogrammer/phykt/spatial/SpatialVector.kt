@@ -4,9 +4,9 @@ import com.thepyprogrammer.phykt.base.Angle
 import com.thepyprogrammer.phykt.linalg.Vector
 import kotlin.math.*
 
-data class SpatialVector(
-    val x: Double = 0.0,
-    val y: Double = 0.0,
+open class SpatialVector(
+    open val x: Double = 0.0,
+    open val y: Double = 0.0,
     val z: Double = 0.0
 ): Vector(x, y, z) {
     infix fun cross(other: SpatialVector) =
@@ -21,4 +21,5 @@ data class SpatialVector(
 
     val angle: Angle
         get() = angleFrom(SpatialVector(1.0))
+
 }
