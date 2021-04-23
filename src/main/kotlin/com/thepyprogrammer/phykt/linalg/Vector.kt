@@ -2,10 +2,11 @@ package com.thepyprogrammer.phykt.linalg
 
 import kotlin.math.pow
 
+
 open class Vector(
     vararg val values: Double,
-    val isUnit: Boolean = false
-): ArrayList<Double>(values.toList()) {
+    private val isUnit: Boolean = false
+): ArrayList<Double>(values.toList())  {
     override fun toString() = values.joinToString(separator = ", ", prefix = "(", postfix = ")")
 
     // unary operator funcs
@@ -52,6 +53,9 @@ open class Vector(
 
     val ndim: Int
         get() = size
+
+    val transpose: Matrix
+        get() = columnVectorOf(*values)
 
 
     infix fun dot(other: Vector): Double {
