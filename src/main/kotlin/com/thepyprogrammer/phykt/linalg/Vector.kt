@@ -73,6 +73,9 @@ open class Vector(
         return sum
     }
 
+
+    infix operator fun times(other: Matrix) = Matrix(this) * other
+
     infix operator fun times(other: Double): Vector {
         val res = Vector(*this.values)
         for(i in 0..size) {
