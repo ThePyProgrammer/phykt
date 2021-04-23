@@ -56,6 +56,18 @@ fun Double.round(dp: Int = 0) = run {
     }
 }
 
+infix operator fun Double.plus(other: Number) =
+    when (other) {
+        is Byte -> plus(other)
+        is Double -> plus(other)
+        is Float -> plus(other)
+        is Int -> plus(other)
+        is Long -> plus(other)
+        is Short -> plus(other)
+        else -> this
+    }
+
+
 fun sin(vararg angles: Double): DoubleArray {
     val arr = DoubleArray(angles.size)
     for (i in angles.indices) arr[i] = kotlin.math.sin(angles[i])
