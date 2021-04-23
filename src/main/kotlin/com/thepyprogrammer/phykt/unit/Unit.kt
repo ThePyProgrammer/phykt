@@ -151,6 +151,8 @@ data class Unit(
 
     }
 
+    infix operator fun invoke(value: Double) = Quantity(value, this)
+
 
     companion object {
         private val SIs = arrayOf("kg", "mol", "m", "A", "s", "K", "cd")
