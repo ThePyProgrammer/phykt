@@ -5,9 +5,9 @@ import com.thepyprogrammer.phykt.linalg.Vector
 import kotlin.math.*
 
 open class SpatialVector(
-    open val x: Double = 0.0,
-    open val y: Double = 0.0,
-    val z: Double = 0.0
+    open var x: Double = 0.0,
+    open var y: Double = 0.0,
+    open var z: Double = 0.0
 ): Vector(x, y, z) {
     infix fun cross(other: SpatialVector) =
         SpatialVector(
@@ -21,5 +21,8 @@ open class SpatialVector(
 
     val angle: Angle
         get() = angleFrom(SpatialVector(1.0))
+
+    override infix operator fun times(other: Double) = super.times(other).toSpatialVector()
+    override infix operator fun div(other: Double) = super.div(other).toSpatialVector()
 
 }
