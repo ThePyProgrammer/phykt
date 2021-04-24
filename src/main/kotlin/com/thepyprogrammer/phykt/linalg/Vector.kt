@@ -1,5 +1,7 @@
 package com.thepyprogrammer.phykt.linalg
 
+import com.thepyprogrammer.ktlib.array.each
+import com.thepyprogrammer.phykt.spatial.SpatialVector
 import kotlin.math.pow
 
 
@@ -49,7 +51,9 @@ open class Vector(
         get() = squareSum.pow(0.5)
 
     val unitVector: Vector
-        get() = if(isUnit) this else this / magnitude
+        get() {
+            return Vector(*values.toTypedArray().each { it / mag }.toDoubleArray(), isUnit=true)
+        }
 
     val ndim: Int
         get() = size
@@ -68,19 +72,12 @@ open class Vector(
     }
 
 
-    infix operator fun times(other: Vector): Double {
-        val minSize = minOf(size, other.size)
-        var sum = 0.0
-        for(i in 0..minSize) {
-            sum += get(i) * other[i]
-        }
-        return sum
-    }
+    infix operator fun times(other: Vector) = this dot other
 
 
     infix operator fun times(other: Matrix) = Matrix(this) * other
 
-    infix operator fun times(other: Double): Vector {
+    open infix operator fun times(other: Double): Vector {
         val res = Vector(*this.values)
         for(i in 0..size) {
             res[i] *= other
@@ -95,13 +92,7 @@ open class Vector(
 
 
 
-    infix operator fun div(other: Double): Vector {
-        val list = values.toMutableList()
-        for(i in 0..size) {
-            list[i] /= other
-        }
-        return Vector(*list.toDoubleArray(), isUnit=true)
-    }
+    open infix operator fun div(other: Double) = Vector(*values.toTypedArray().each { it / other }.toDoubleArray())
 
     infix operator fun div(other: Float) = this / other.toDouble()
     infix operator fun div(other: Int) = this / other.toDouble()
@@ -110,5 +101,14 @@ open class Vector(
 
 
     override infix operator fun get(index: Int) = values[index]
+    
+    
+    fun toSpatialVector() = when {
+        values.isEmpty() -> SpatialVector()
+        values.size == 1 -> SpatialVector(values[0])
+        values.size == 2 -> SpatialVector(values[0], values[1])
+        values.size >= 3 -> SpatialVector(values[0], values[1], values[2])
+        else -> SpatialVector()
+    }
 
 }
