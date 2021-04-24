@@ -7,10 +7,10 @@ import kotlin.math.abs
 
 data class Unit(
     var unit: String = "",
-    val unitname: String = "",
-    val unitfunc: String = "",
-    val mul: Int = 1,
-    val add: Int = 0,
+    val name: String = "",
+    val func: String = "",
+    val mul: Double = 1.0,
+    val add: Double = 0.0,
     val isScalar: Boolean = false
 ): HashMap<String, Double>() {
 
@@ -21,35 +21,17 @@ data class Unit(
     infix operator fun times(other: Unit): Unit {
         val numer = deriveNumer() + other.deriveNumer()
         val denom = deriveDenom() + other.deriveDenom()
-        return Unit(formUnit(numer, denom))
+        return Unit(formUnit(numer, denom), mul=mul*other.mul, add=add)
     }
 
     infix operator fun div(other: Unit): Unit {
         val numer = deriveNumer() + other.deriveDenom()
         val denom = deriveDenom() + other.deriveNumer()
-        return Unit(formUnit(numer, denom))
-    }
-
-    infix fun pow(pow: Double) = run {
-        var numer = ""
-        var denom = ""
-        for ((key, value1) in this) {
-            val p = value1 * pow
-            if (p == 0.0)
-                continue
-            else if (p == 1.0)
-                numer += key
-            else if (p == -1.0)
-                denom += key
-            else if (p > 0)
-                numer += "$key^$p"
-            else if (p < 0)
-                denom += "$key^" + abs(p)
-        }
-        Unit(formUnit(numer, denom))
+        return Unit(formUnit(numer, denom), mul=mul/other.mul, add=add)
     }
 
 
+    infix fun pow(pow: Double) = Unit(representUnit { it * pow })
     infix fun pow(pow: Float) = pow(pow.toDouble())
     infix fun pow(pow: Int) = pow(pow.toDouble())
     infix fun pow(pow: Short) = pow(pow.toDouble())
@@ -86,21 +68,8 @@ data class Unit(
             this[u] = pownum - powden
         }
 
-        var numer = ""
-        var denom = ""
-
-        loop@ for ((key, value1) in this) {
-            when {
-                value1 == 0.0 -> continue@loop
-                value1 == 1.0 -> numer += key
-                value1 == -1.0 -> denom += key
-                value1 > 0 -> numer += "$key^$value1"
-                value1 < 0 -> denom += "$key^" + abs(value1)
-            }
-        }
-        unit = formUnit(numer, denom)
+        unit = representUnit()
     }
-
 
 
     private fun extractAll(template: String, codon: String) = run {
@@ -113,10 +82,18 @@ data class Unit(
             start = temp.indexOf("$codon^")
             var str = ""
             for (i in temp.substring(start + codon.length + 1).toCharArray()) {
-                if (Pattern.compile("\\d|\\.").matcher("" + i).also { m = it }
-                        .matches()) str += m.group() else break
+                if (Pattern.compile("\\d|\\.")
+                        .matcher("" + i)
+                        .also { m = it }
+                        .matches()
+                ) str += m.group()
+                else break
             }
-            p += if (str.contains(".")) str.toDouble() else str.toInt().toDouble()
+            p +=
+                if (str.contains("."))
+                    str.toDouble()
+                else str.toInt().toDouble()
+
             temp = temp.replaceFirst("$codon\\^" + str.toRegex(), "")
         }
         while (temp.contains(codon)) {
@@ -127,6 +104,25 @@ data class Unit(
     }
 
     private data class ExtractType(val p: Double, val temp: String)
+
+    private fun representUnit(function: (Double) -> Double): String {
+        var numer = ""
+        var denom = ""
+
+        loop@ for ((key, value) in this) {
+            val p = function(value)
+            when {
+                p == 0.0 -> continue@loop
+                p == 1.0 -> numer += key
+                p == -1.0 -> denom += key
+                p > 0 -> numer += "$key^$value"
+                p < 0 -> denom += "$key^" + abs(value)
+            }
+        }
+        return formUnit(numer, denom)
+    }
+
+    private fun representUnit() = representUnit { it }
 
 
     override fun toString() = run {
@@ -150,6 +146,7 @@ data class Unit(
         }
 
     }
+
 
     infix operator fun invoke(value: Double) = Quantity(value, this)
 
