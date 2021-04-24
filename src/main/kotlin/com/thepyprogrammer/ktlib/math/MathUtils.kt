@@ -1,5 +1,7 @@
 package com.thepyprogrammer.ktlib.math
 
+import com.thepyprogrammer.ktlib.array.each
+import com.thepyprogrammer.ktlib.math.types.Complex
 import java.lang.Math.getExponent
 import java.util.*
 import kotlin.math.ln1p
@@ -442,3 +444,17 @@ fun randFloat(lowerBound: Float, upperBound: Float) = lowerBound + randFloat(upp
 fun randFloat(lowerBound: Float, upperBound: Float, step: Float) = lowerBound + randFloat((upperBound - lowerBound - 1) / step - 1)
 
 fun randBoolean() = random.nextBoolean()
+
+
+
+
+/**
+ * Convert Double Array to generic Complex Array
+ */
+fun Array<Double>.toComplex(): Array<Complex> = each { Complex(it) }
+
+
+/**
+ * Compute X * conj(X)
+ */
+fun Array<Complex>.timesConj(): Array<Double> = each { it.timesConj }
