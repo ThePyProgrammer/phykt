@@ -1,6 +1,7 @@
 package com.thepyprogrammer.phykt.unit
 
 import com.thepyprogrammer.phykt.quantity.Quantity
+import com.thepyprogrammer.phykt.quantity.quantityOf
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.math.abs
@@ -21,14 +22,31 @@ data class Unit(
     infix operator fun times(other: Unit): Unit {
         val numer = deriveNumer() + other.deriveNumer()
         val denom = deriveDenom() + other.deriveDenom()
-        return Unit(formUnit(numer, denom), mul=mul*other.mul, add=add)
+        return Unit(formUnit(numer, denom))
     }
 
     infix operator fun div(other: Unit): Unit {
         val numer = deriveNumer() + other.deriveDenom()
         val denom = deriveDenom() + other.deriveNumer()
-        return Unit(formUnit(numer, denom), mul=mul/other.mul, add=add)
+        return Unit(formUnit(numer, denom))
     }
+
+    infix fun equals(other: Unit) = (other.unit == unit)
+
+    override infix fun equals(other: Any?): Boolean {
+        return when (other) {
+            is Unit -> this equals other
+            is Quantity -> this equals other.unit && other.value == 1.0
+            else -> false
+        }
+    }
+
+
+
+    infix operator fun invoke(value: Double) = quantityOf(value, this)
+    operator fun invoke(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0) = quantityOf(x, y, z, this)
+
+    infix fun strictEquals(other: Unit) = (this equals other && this.mul == other.mul && this.add == other.mul)
 
 
     infix fun pow(pow: Double) = Unit(representUnit { it * pow })
@@ -147,8 +165,16 @@ data class Unit(
 
     }
 
-
-    infix operator fun invoke(value: Double) = Quantity(value, this)
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + unit.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + func.hashCode()
+        result = 31 * result + mul.hashCode()
+        result = 31 * result + add.hashCode()
+        result = 31 * result + isScalar.hashCode()
+        return result
+    }
 
 
     companion object {
