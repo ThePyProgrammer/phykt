@@ -17,7 +17,6 @@ inline fun <T, reified R> Iterable<T>.each(function: (T) -> R): Array<R> {
     return list.toTypedArray()
 }
 
-
 /**
  * Returns array with piecewise operation having been performed
  * Can be utilised to apply piecewise functions on Array
@@ -28,17 +27,6 @@ inline fun <T, reified R> Array<T>.each(function: (T) -> R): Array<R> {
     forEach { list.add(function(it)) }
     return list.toTypedArray()
 }
-
-
-fun <T, R> Collection<T>.fold(
-    initial: R,
-    combine: (acc: R, nextElement: T) -> R
-): R {
-    var accumulator: R = initial
-    forEach { accumulator = combine(accumulator, it) }
-    return accumulator
-}
-
 
 /**
  * Piecewise Division for Double Array/List
