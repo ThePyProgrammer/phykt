@@ -30,17 +30,6 @@ inline fun <T, reified R> Array<T>.each(function: (T) -> R): Array<R> {
 }
 
 
-/**
- * Returns list with piecewise operation having been performed
- * Can be utilised to apply piecewise functions on List
- * @param  function  piecewise function to apply on each element
- */
-inline fun <T, reified R> List<T>.each(function: (T) -> R): List<R> {
-    val list = mutableListOf<R>()
-    forEach { list.add(function(it)) }
-    return list
-}
-
 fun <T, R> Collection<T>.fold(
     initial: R,
     combine: (acc: R, nextElement: T) -> R
@@ -54,8 +43,8 @@ fun <T, R> Collection<T>.fold(
 /**
  * Piecewise Division for Double Array/List
  */
-infix operator fun Array<Double>.div(x: Number) = each { it / x.toDouble() }
-infix operator fun List<Double>.div(x: Number) = each { it / x.toDouble() }
+infix operator fun Array<Double>.div(x: Number) = map { it / x.toDouble() }
+infix operator fun List<Double>.div(x: Number) = map { it / x.toDouble() }
 
 
 /**
@@ -66,7 +55,7 @@ data class Slice(val start: Int, val end: Int, val step: Int)
 
 infix fun Pair<Int, Int>.by(step: Int) = Slice(first, second, step)
 
-inline fun <reified T> Array<T>.slice(slice: Slice) = (slice.start..slice.end step slice.step).each { this[it] }
+inline fun <reified T> Array<T>.slice(slice: Slice) = (slice.start..slice.end step slice.step).map { this[it] }
 
 inline fun <reified T> Array<T>.slice(slice: Pair<Int, Int>) = slice( slice by 1 )
 
@@ -74,7 +63,7 @@ inline fun <reified T> Array<T>.slice(start: Int, end: Int, step: Int = 1) = sli
 
 
 
-inline fun <reified T> List<T>.slice(slice: Slice) = (slice.start..slice.end step slice.step).each { this[it] }
+inline fun <reified T> List<T>.slice(slice: Slice) = (slice.start..slice.end step slice.step).map { this[it] }
 
 inline fun <reified T> List<T>.slice(slice: Pair<Int, Int>) = slice( slice by 1 )
 
@@ -94,7 +83,7 @@ inline fun<reified T: Number> Array<T>.mean() = sum() / size
 /**
  * Normalise Double Array
  */
-inline fun <reified T: Number> Array<T>.normalise() = each { it.toDouble() - mean() }
+inline fun <reified T: Number> Array<T>.normalise() = map { it.toDouble() - mean() }
 
 /**
  * Get a 1D x-sized Zero Double Array
@@ -104,7 +93,7 @@ fun zeros(x: Int) = (0..x).each { 0.0 }
 /**
  * Get a 2D row x col Zero Double Array
  */
-fun zeros(row: Int, col: Int): Array<Array<Double>> = (0..row).each { zeros(col) }
+fun zeros(row: Int, col: Int): DoubleArray2D = (0..row).each { zeros(col) }
 
 /**
  * Transpose 2D Double Array
