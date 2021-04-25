@@ -2,7 +2,6 @@ package com.thepyprogrammer.phykt.linalg
 
 import com.thepyprogrammer.ktlib.array.each
 import com.thepyprogrammer.ktlib.array.zeros
-import com.thepyprogrammer.ktlib.math.max
 
 class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
     init {
@@ -18,11 +17,14 @@ class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
     val n: Int
         get() = fold(0) { acc, it -> if(it.size > acc) it.size else acc }
 
+    val sum: Double
+        get() = fold(0.0) { acc, it -> acc + it.sum }
+
     infix operator fun times(other: Matrix) = run {
         val matrix = zeroMatrixOf(m, other.n)
         for(i in 0..m) {
             for(j in 0..other.n) {
-                matrix[i, j] = this[i] * other.getColumn(j)
+                matrix[i, j] = this[i] dot other.getColumn(j)
             }
         }
         matrix
@@ -30,14 +32,7 @@ class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
 
     infix operator fun times(other: Vector) = this * Matrix(other)
 
-    fun getColumn(index: Int) = run {
-        val arr = mutableListOf<Double>()
-        forEach {
-            if(index >= it.size) arr.add(0.0)
-            else arr.add(it[index])
-        }
-        vectorOf(*arr.toDoubleArray())
-    }
+    fun getColumn(index: Int) = vectorOf(*each { if(index >= it.size) 0.0 else it[index] }.toDoubleArray())
 
     operator fun get(m: Int, n: Int) = this[m][n]
 
