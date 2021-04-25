@@ -22,14 +22,17 @@ fun matrixOf(array: DoubleArray2D) = array.toMatrix()
 fun zeroVectorOf(size: Int) = vectorOf(*zeros(size))
 fun zeroMatrixOf(m: Int = 2, n: Int = 2) = Matrix(*vectorArrayOf(zeros(m, n)))
 fun zeroMatrixOf(size: Int) = matrixOf((0..size).each { zeroVectorOf(it) }.toList())
+
+fun unitVectorOf(dim: Int) = vectorOf(*(0..dim).each { 0.0 }.apply { this[dim] = 1.0 })
 fun identityMatrixOf(size: Int) = zeroMatrixOf(size).apply { (0..size).forEach { this[it, it] = 1.0 } }
 
 fun DoubleArray.toVector(): Vector = vectorOf(*this)
-fun Array<Double>.toVector(): Vector = toDoubleArray().toVector()
+inline fun <reified T: Number> Array<T>.toVector(): Vector = each { it.toDouble() }.toDoubleArray().toVector()
+inline fun <reified T: Number> Collection<T>.toVector(): Vector = toTypedArray().toVector()
 
-inline fun <reified T: Number> Array<T>.toColumnVector(): Matrix = matrixOf(*each { vectorOf(it) })
 fun DoubleArray.toColumnVector(): Matrix = toTypedArray().toColumnVector()
-inline fun <reified T: Number> List<T>.toColumnVector(): Matrix = toTypedArray().toColumnVector()
+inline fun <reified T: Number> Array<T>.toColumnVector(): Matrix = matrixOf(*each { vectorOf(it) })
+inline fun <reified T: Number> Collection<T>.toColumnVector(): Matrix = toTypedArray().toColumnVector()
 
 fun DoubleArray2D.vectorize(): Array<Vector> = each { it.toVector() }
 fun DoubleArray2D.toMatrix() = matrixOf(*vectorize())
