@@ -1,6 +1,8 @@
 package com.thepyprogrammer.phykt.linalg
 
+import com.thepyprogrammer.ktlib.array.each
 import com.thepyprogrammer.ktlib.array.zeros
+import com.thepyprogrammer.ktlib.math.max
 
 class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
     init {
@@ -14,13 +16,7 @@ class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
         get() = size
 
     val n: Int
-        get() {
-            var maxSize = 0
-            forEach {
-                if(it.size > maxSize) maxSize = it.size
-            }
-            return maxSize
-        }
+        get() = max(*each { it.size })
 
     infix operator fun times(other: Matrix) = run {
         val minSize = minOf(n, other.m)
