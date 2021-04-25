@@ -16,14 +16,13 @@ class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
         get() = size
 
     val n: Int
-        get() = max(*each { it.size })
+        get() = fold(0) { acc, it -> if(it.size > acc) it.size else acc }
 
     infix operator fun times(other: Matrix) = run {
-        val minSize = minOf(n, other.m)
-        val matrix = zeroMatrixOf()
-        for(i in 0..minSize) {
-            for(j in 0..minSize) {
-                matrix[i, j] = getColumn(i) * other[j]
+        val matrix = zeroMatrixOf(m, other.n)
+        for(i in 0..m) {
+            for(j in 0..other.n) {
+                matrix[i, j] = this[i] * other.getColumn(j)
             }
         }
         matrix
