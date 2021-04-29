@@ -2,6 +2,7 @@ package com.thepyprogrammer.ktlib.math
 
 import com.thepyprogrammer.ktlib.array.each
 import com.thepyprogrammer.ktlib.math.types.Complex
+import com.thepyprogrammer.ktlib.math.types.StandardNotation
 import java.lang.Math.getExponent
 import java.util.*
 import kotlin.math.ln1p
@@ -11,6 +12,13 @@ import kotlin.math.roundToInt
 var PI = Math.PI
 var E = java.lang.Math.E
 
+
+
+/**
+ * Buitlin Methods
+ */
+infix fun <T: Number> T.pow(other: Number): Double = toDouble().pow(other.toDouble())
+infix fun <T: Number> T.`**`(other: Number): Double = this pow other
 
 operator fun Double.rangeTo(other: Double) = run {
     val list = mutableListOf<Double>()
@@ -52,9 +60,7 @@ fun Float.round(dp: Int = 0) = run {
 fun Double.round(dp: Int = 0) = run {
     when {
         dp <= 0 -> this.roundToInt().toDouble()
-        else -> {
-            String.format("%.${dp}f", this).toDouble()
-        }
+        else -> String.format("%.${dp}f", this).toDouble()
     }
 }
 
@@ -68,6 +74,41 @@ infix operator fun Double.plus(other: Number) =
         is Short -> plus(other)
         else -> this
     }
+
+infix operator fun Double.minus(other: Number) =
+    when (other) {
+        is Byte -> minus(other)
+        is Double -> minus(other)
+        is Float -> minus(other)
+        is Int -> minus(other)
+        is Long -> minus(other)
+        is Short -> minus(other)
+        else -> this
+    }
+
+
+private fun deriveOrderOfMagnitude(number: Double): Int {
+    var comparer = number
+    var times = 0
+    while(comparer < 1.0) {
+        comparer *= 10
+        times -= 1
+    }
+    while(comparer > 1.0) {
+        comparer /= 10
+        times += 1
+    }
+    return times
+}
+
+val Number.orderOfMagnitude: Int
+    get() = deriveOrderOfMagnitude(this.toDouble())
+
+val Number.standardNotation: StandardNotation
+    get() = StandardNotation(this)
+
+fun <T: Number> T.roundToSF(sf: Int) = (standardNotation roundToSF sf).toDouble()
+
 
 
 fun sin(vararg angles: Double): DoubleArray {
@@ -444,7 +485,6 @@ fun randFloat(lowerBound: Float, upperBound: Float) = lowerBound + randFloat(upp
 fun randFloat(lowerBound: Float, upperBound: Float, step: Float) = lowerBound + randFloat((upperBound - lowerBound - 1) / step - 1)
 
 fun randBoolean() = random.nextBoolean()
-
 
 
 
