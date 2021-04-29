@@ -3,7 +3,7 @@ package com.thepyprogrammer.phykt.quantity
 import com.thepyprogrammer.phykt.spatial.SpatialVector
 import com.thepyprogrammer.phykt.unit.Unit
 
-open class VectorQuantity(val vector: SpatialVector, override var unit: Unit): Quantity(vector.magnitude, unit) {
+open class VectorQuantity(val vector: SpatialVector, override val unit: Unit): Quantity(vector.magnitude, unit) {
     open var x: Double
         get() = vector.x
         set(other) { vector.x = other }
@@ -45,5 +45,6 @@ open class VectorQuantity(val vector: SpatialVector, override var unit: Unit): Q
             else -> this
         }
     }
+
 
 }
