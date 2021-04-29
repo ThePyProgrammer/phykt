@@ -6,7 +6,7 @@ import com.thepyprogrammer.phykt.unit.Unit
 
 abstract class Quantity(
     open var value: Double = 0.0,
-    open var unit: Unit = Unit("")
+    open val unit: Unit = Unit("")
 ) : Cloneable, Comparable<Any?> {
 //    private lateinit var powers: HashMap<String, Double>
 
@@ -114,18 +114,12 @@ abstract class Quantity(
     operator fun inc() = this plus 1
     operator fun dec() = this minus 1
 
-    infix fun pow(pow: Double): Quantity = quantityOf(value.pow(pow), unit.pow(pow))
-
-    infix fun pow(pow: Float) = pow(pow.toDouble())
-    infix fun pow(pow: Int) = pow(pow.toDouble())
-    infix fun pow(pow: Short) = pow(pow.toDouble())
-    infix fun pow(pow: Long) = pow(pow.toDouble())
-    infix fun pow(pow: Quantity) = pow(pow.toDouble())
+    open infix fun pow(pow: Number): Quantity = quantityOf(value.pow(pow.toDouble()), unit.pow(pow.toDouble()))
 
 
 
-    fun toDouble() = value.toInt()
-    fun toFloat() = value.toInt()
+    fun toDouble() = value
+    fun toFloat() = value.toFloat()
     fun toInt() = value.toInt()
     fun toShort() = value.toInt().toShort()
     fun toLong() = value.toLong()
