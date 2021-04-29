@@ -1,6 +1,7 @@
 package com.thepyprogrammer.phykt.linalg
 
 import com.thepyprogrammer.ktlib.array.each
+import com.thepyprogrammer.ktlib.math.`**`
 import com.thepyprogrammer.phykt.spatial.SpatialVector
 import kotlin.math.pow
 
@@ -22,7 +23,7 @@ open class Vector(
         get() = sum / size
 
     val squareSum: Double
-        get() = fold(0.0) { acc, it -> acc + it.pow(2) }
+        get() = fold(0.0) { acc, it -> acc + it `**` 2 }
 
     val squareMean: Double
         get() = squareSum / size
