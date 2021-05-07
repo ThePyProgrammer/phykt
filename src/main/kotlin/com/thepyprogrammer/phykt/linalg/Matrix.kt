@@ -1,6 +1,5 @@
 package com.thepyprogrammer.phykt.linalg
 
-import com.thepyprogrammer.ktlib.array.each
 import com.thepyprogrammer.ktlib.array.zeros
 
 class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
@@ -32,7 +31,7 @@ class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
 
     infix operator fun times(other: Vector) = this * Matrix(other)
 
-    fun getColumn(index: Int) = vectorOf(*each { if(index >= it.size) 0.0 else it[index] }.toDoubleArray())
+    fun getColumn(index: Int) = vectorOf(*map { if(index >= it.size) 0.0 else it[index] }.toDoubleArray())
 
     operator fun get(m: Int, n: Int) = this[m][n]
 
