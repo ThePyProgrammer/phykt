@@ -6,4 +6,12 @@ import com.thepyprogrammer.phykt.unit.s
 
 class Time(override var value: Double): Quantity(value, s) {
     constructor(quantity: Quantity): this(quantity.value)
+
+    override fun dot(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
+
+    override fun cross(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
 }

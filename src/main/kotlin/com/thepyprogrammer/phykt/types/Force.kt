@@ -7,4 +7,12 @@ import com.thepyprogrammer.phykt.unit.s
 
 class Force(override var value: Double): Quantity(value, kg * m/ s.pow(2)) {
     constructor(quantity: Quantity): this(quantity.value)
+
+    override fun dot(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
+
+    override fun cross(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
 }

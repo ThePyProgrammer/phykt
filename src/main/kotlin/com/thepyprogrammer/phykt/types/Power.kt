@@ -11,4 +11,11 @@ class Power(override var value: Double): Quantity(value, W) {
 
 
     infix fun resistance(current: Current) = Resistance(this / current.pow(0.5))
+    override fun dot(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
+
+    override fun cross(other: Quantity): Quantity {
+        TODO("Not yet implemented")
+    }
 }
