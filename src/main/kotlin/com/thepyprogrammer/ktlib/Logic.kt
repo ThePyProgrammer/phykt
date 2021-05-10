@@ -40,6 +40,10 @@ class Object(vararg vals: Pair<Any, Any>): HashMap<Any, Any>(hashMapOf(*vals)) {
     }
 }
 
+
+/**
+ * struct like in Swift, intertextuality it is.
+ */
 fun struct(vararg vals: Pair<Any, Any>, apply: Object.() -> Unit) = Object().apply(apply)
 
 fun test() {
