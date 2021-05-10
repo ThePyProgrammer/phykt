@@ -46,21 +46,21 @@ class Object(vararg vals: Pair<Any, Any>): HashMap<Any, Any>(hashMapOf(*vals)) {
  */
 fun struct(vararg vals: Pair<Any, Any>, apply: Object.() -> Unit) = Object().apply(apply)
 
-fun test() {
-    var other = 5
-    val obj = struct(
-        "five" `=` 10,
-        "hello" `=` 99
-    ) {
-        other = this["five"] as Int
-    }
-
-    obj.let(
-        "this" `=` 5,
-        9 `=` 20,
-        "99" `=` 99
-    )
-}
+//fun test() {
+//    var other = 5
+//    val obj = struct(
+//        "five" `=` 10,
+//        "hello" `=` 99
+//    ) {
+//        other = this["five"] as Int
+//    }
+//
+//    obj.let(
+//        "this" `=` 5,
+//        9 `=` 20,
+//        "99" `=` 99
+//    )
+//}
 
 
 fun <T> recurse(init: T, block: (T) -> T?): MutableList<T> {
