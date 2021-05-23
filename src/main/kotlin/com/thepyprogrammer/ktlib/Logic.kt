@@ -32,35 +32,7 @@ fun untilInt(condition: () -> Int = { 1 }, block: () -> Unit = {}) {
     until({ condition().toBoolean() }, block)
 }
 
-infix fun Any.`=`(other: Any) = this to other
 
-class Object(vararg vals: Pair<Any, Any>): HashMap<Any, Any>(hashMapOf(*vals)) {
-    fun let(vararg pairs: Pair<Any, Any>) {
-        putAll(hashMapOf(*pairs))
-    }
-}
-
-
-/**
- * struct like in Swift, intertextuality it is.
- */
-fun struct(vararg vals: Pair<Any, Any>, apply: Object.() -> Unit) = Object().apply(apply)
-
-//fun test() {
-//    var other = 5
-//    val obj = struct(
-//        "five" `=` 10,
-//        "hello" `=` 99
-//    ) {
-//        other = this["five"] as Int
-//    }
-//
-//    obj.let(
-//        "this" `=` 5,
-//        9 `=` 20,
-//        "99" `=` 99
-//    )
-//}
 
 
 fun <T> recurse(init: T, block: (T) -> T?): MutableList<T> {
