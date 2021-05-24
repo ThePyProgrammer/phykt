@@ -33,8 +33,6 @@ fun untilInt(condition: () -> Int = { 1 }, block: () -> Unit = {}) {
 }
 
 
-
-
 fun <T> recurse(init: T, block: (T) -> T?): MutableList<T> {
     var response = block(init)
     val responses = mutableListOf<T>()
@@ -47,13 +45,19 @@ fun <T> recurse(init: T, block: (T) -> T?): MutableList<T> {
 
 fun <T> recursive(init: T, block: (Any, T) -> T) = block(block, init)
 
-fun fib(maxn:Int) =
-    recursive(maxn) { block, n ->
-        val fib = block as ((Any, Int) -> Int)
-        given(n > 2) {
-            fib(fib, n-1) + fib(fib, n-2)
-        } ?: n
-    }
+//fun fib(maxn:Int) =
+//    recursive(maxn) { block, n ->
+//        val fib = block as ((Any, Int) -> Int)
+//        given(n > 2) {
+//            fib(fib, n-1) + fib(fib, n-2)
+//        } ?: n
+//    }
+
+fun fib(n: Int): Int =
+    if(n > 1)
+        fib(n-1) + fib(n-2)
+    else n
+
 
 data class Knapsack(val capacity: Int, val weights: List<Int>, val values: List<Int>, var counter: Int)
 

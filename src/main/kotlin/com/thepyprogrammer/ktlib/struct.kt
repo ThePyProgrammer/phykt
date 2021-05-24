@@ -15,7 +15,7 @@ class Object<T, R>(vararg vals: Pair<T, R>): HashMap<T, R>(hashMapOf(*vals)) {
 /**
  * struct like in Swift, intertextuality it is.
  */
-fun <T, R> struct(vararg vals: Pair<T, R>, apply: Object<T, R>.() -> Unit) = Object(*vals).apply(apply)
+fun <T, R> struct(vararg vals: Pair<T, R>, apply: Object<T, R>.() -> Unit = {}) = Object(*vals).apply(apply)
 
 fun test() {
     var other: Int = 5
