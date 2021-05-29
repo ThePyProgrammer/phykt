@@ -33,62 +33,17 @@ fun untilInt(condition: () -> Int = { 1 }, block: () -> Unit = {}) {
 }
 
 
-fun <T> recurse(init: T, block: (T) -> T?): MutableList<T> {
-    var response = block(init)
-    val responses = mutableListOf<T>()
-    while(response != null) {
-        responses.add(response)
-        response = block(response)
-    }
-    return responses
-}
-
-fun <T> recursive(init: T, block: (Any, T) -> T) = block(block, init)
-
-//fun fib(maxn:Int) =
-//    recursive(maxn) { block, n ->
-//        val fib = block as ((Any, Int) -> Int)
-//        given(n > 2) {
-//            fib(fib, n-1) + fib(fib, n-2)
-//        } ?: n
-//    }
-
-fun fib(n: Int): Int =
-    if(n > 1)
-        fib(n-1) + fib(n-2)
-    else n
 
 
-data class Knapsack(val capacity: Int, val weights: List<Int>, val values: List<Int>, var counter: Int)
-
-//fun knapsack(capacity: Int, weights: List<Int>, values: List<Int>, counter: Int) {
-//    recursive(Knapsack(capacity, weights, values, counter)) { block, sack ->
-//        val knapsackFun = block as ((Any, Knapsack) -> Knapsack)
-//        val newKnapsack = sack.also { it.counter-- }
-//        unless(
-//            counter == 0 || capacity == 0
-//        ) {
-//            if(sack.weights.get(counter - 1) > capacity) {
-//                knapsackFun(knapsackFun, newKnapsack)
-//            } else {
-//                val left_capacity = sack.capacity - weights[counter - 1]
-//                knapsackFun(knapsackFun, newKnapsack)
-//            }
-//        } ?: 0
-//
-//    }
-//}
 
 
-//fun maxDivide(a: Int, b: Int): Int = run {
-//    var _a = a
-//    loopInt({ _a % b }) { _a /= b }
-//    _a
-//    recurse(a) {
-//        unless(it % b) { it / b }
-//    }[0]
-//}
+infix operator fun (() -> Unit).plus(other: () -> Unit): () -> Unit = { this(); other() }
 
-fun Boolean.toInt() = if(this) 1 else 0
-fun Int.toBoolean() = this != 0
 
+infix operator fun <T> (T.() -> Unit).plus(other: T.() -> Unit): T.() -> Unit = { this@plus(this); other(this) }
+
+
+infix operator fun<T, R> ((T, R) -> Unit).plus(other: (T, R) -> Unit): (T, R) -> Unit = { t, r -> this(t, r); other(t, r) }
+
+
+infix operator fun<T, R, S> ((T, R, S) -> Unit).plus(other: (T, R, S) -> Unit): (T, R, S) -> Unit = { t, r, s -> this(t, r, s); other(t, r, s) }

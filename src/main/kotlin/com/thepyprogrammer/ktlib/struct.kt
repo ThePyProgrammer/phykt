@@ -22,7 +22,14 @@ fun <T, R> struct(vararg vals: Pair<T, R>, apply: Object<T, R>.() -> Unit = {}) 
  * This function exists to allow the proper reading of values so that the struct, when formed, does not backfire
  * Generalises all keys as of type Any. It allows the let function to work much better.
  */
-fun anystruct(vararg vals: Pair<Any, Any>, apply: Object<Any, Any>.() -> Unit = {}) = Object(*vals).apply(apply)
+fun anyStruct(vararg vals: Pair<Any, Any>, apply: Object<Any, Any>.() -> Unit = {}) = Object(*vals).apply(apply)
+
+
+/**
+ * Similar to the above function, this streamlines the keys as String
+ */
+fun namedStruct(vararg vals: Pair<String, Any>, apply: Object<String, Any>.() -> Unit = {}) = Object(*vals).apply(apply)
+
 
 fun test() {
     var other = 5
