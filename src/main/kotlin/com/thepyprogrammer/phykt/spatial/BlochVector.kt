@@ -1,7 +1,7 @@
 package com.thepyprogrammer.phykt.spatial
 
-import com.thepyprogrammer.phykt.base.Angle
-import com.thepyprogrammer.phykt.linalg.Vector
+import com.thepyprogrammer.linkt.base.Angle
+import com.thepyprogrammer.linkt.Vector
 
 /**
  * TODO

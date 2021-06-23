@@ -1,7 +1,7 @@
 package com.thepyprogrammer.phykt.spatial
 
-import com.thepyprogrammer.phykt.base.Complex
-import com.thepyprogrammer.phykt.base.Point
+import com.thepyprogrammer.linkt.base.Complex
+import com.thepyprogrammer.linkt.base.Point
 
 class ArgandVector(val real: Double = 0.0, val imag: Double = 0.0): Vector2D(real, imag) {
     val complex = Complex(real, imag)
