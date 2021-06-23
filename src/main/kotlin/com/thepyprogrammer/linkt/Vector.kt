@@ -1,7 +1,6 @@
 package com.thepyprogrammer.linkt
 
 import com.thepyprogrammer.ktlib.math.`**`
-import com.thepyprogrammer.phykt.linalg.columnVectorOf
 import com.thepyprogrammer.linkt.spatial.SpatialVector
 import kotlin.math.pow
 
