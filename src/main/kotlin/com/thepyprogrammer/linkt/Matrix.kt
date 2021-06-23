@@ -1,6 +1,8 @@
-package com.thepyprogrammer.phykt.linalg
+package com.thepyprogrammer.linkt
 
 import com.thepyprogrammer.ktlib.array.zeros
+import com.thepyprogrammer.phykt.linalg.vectorOf
+import com.thepyprogrammer.phykt.linalg.zeroMatrixOf
 
 class Matrix(vararg rows: Vector): ArrayList<Vector>(rows.toList()) {
     init {

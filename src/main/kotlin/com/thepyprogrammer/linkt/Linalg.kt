@@ -2,6 +2,8 @@ package com.thepyprogrammer.phykt.linalg
 
 import com.thepyprogrammer.ktlib.array.DoubleArray2D
 import com.thepyprogrammer.ktlib.array.zeros
+import com.thepyprogrammer.linkt.Matrix
+import com.thepyprogrammer.linkt.Vector
 
 typealias VectorArray = Array<Vector>
 

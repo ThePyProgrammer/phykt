@@ -2,7 +2,7 @@ package com.thepyprogrammer.phykt.spatial
 
 import com.thepyprogrammer.linkt.base.Angle
 import com.thepyprogrammer.linkt.base.Point
-import com.thepyprogrammer.phykt.linalg.Vector
+import com.thepyprogrammer.linkt.Vector
 import kotlin.math.*
 
 open class SpatialVector(
