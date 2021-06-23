@@ -1,6 +1,6 @@
 package com.thepyprogrammer.phykt.quantity
 
-import com.thepyprogrammer.phykt.spatial.SpatialVector
+import com.thepyprogrammer.linkt.spatial.SpatialVector
 import com.thepyprogrammer.phykt.unit.Unit
 
 open class VectorQuantity(val vector: SpatialVector, override val unit: Unit): Quantity(vector.magnitude, unit) {

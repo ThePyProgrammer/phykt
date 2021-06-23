@@ -1,6 +1,6 @@
 package com.thepyprogrammer.linkt.base
 
-import com.thepyprogrammer.phykt.spatial.SpatialVector
+import com.thepyprogrammer.linkt.spatial.SpatialVector
 import kotlin.math.sqrt
 
 

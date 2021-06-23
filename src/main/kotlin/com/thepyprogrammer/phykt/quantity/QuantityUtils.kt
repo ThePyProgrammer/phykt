@@ -1,6 +1,6 @@
 package com.thepyprogrammer.phykt.quantity
 
-import com.thepyprogrammer.phykt.spatial.SpatialVector
+import com.thepyprogrammer.linkt.spatial.SpatialVector
 import com.thepyprogrammer.phykt.types.*
 import com.thepyprogrammer.phykt.unit.*
 import com.thepyprogrammer.phykt.unit.Unit

@@ -1,4 +1,4 @@
-package com.thepyprogrammer.phykt.spatial
+package com.thepyprogrammer.linkt.spatial
 
 import com.thepyprogrammer.linkt.base.Angle
 import com.thepyprogrammer.linkt.base.Point
