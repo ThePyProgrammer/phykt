@@ -1,6 +1,7 @@
 package com.thepyprogrammer.phykt.spatial
 
-import com.thepyprogrammer.phykt.base.Angle
+import com.thepyprogrammer.linkt.base.Angle
+import com.thepyprogrammer.linkt.base.Point
 import com.thepyprogrammer.phykt.linalg.Vector
 import kotlin.math.*
 
@@ -25,4 +26,7 @@ open class SpatialVector(
     override infix operator fun times(other: Double) = super.times(other).toSpatialVector()
     override infix operator fun div(other: Double) = super.div(other).toSpatialVector()
 
+
+
+    val target: Point get() = Point(x, y, z)
 }

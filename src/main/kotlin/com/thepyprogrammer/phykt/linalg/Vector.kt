@@ -77,8 +77,5 @@ open class Vector(
 
     override fun toString() = joinToString(separator = ", ", prefix = "(", postfix = ")")
 
-    fun main() {
-
-    }
-
+    fun toPoint() = toSpatialVector().target
 }
