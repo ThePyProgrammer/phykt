@@ -1,4 +1,4 @@
-package com.thepyprogrammer.phykt.base
+package com.thepyprogrammer.linkt.base
 
 data class Angle(val angle: Double = 0.0) {
 

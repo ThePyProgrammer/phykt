@@ -1,4 +1,4 @@
-package com.thepyprogrammer.phykt.base
+package com.thepyprogrammer.linkt.base
 
 import kotlin.math.*
 import java.lang.Math.PI
